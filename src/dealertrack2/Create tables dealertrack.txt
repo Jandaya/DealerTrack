@@ -1,0 +1,28 @@
+create table keylog ( 
+ stock char(10),
+ vin varchar(100), 
+ year int,
+ make varchar(100),
+ model varchar(100),
+ color varchar(100),
+ price int,
+ location varchar(100),
+ salesstatus bool,
+ primary key (stock) 
+);
+
+create table car ( 
+ stock char(10),
+ vin varchar(100), 
+ year int,
+ make varchar(100),
+ model varchar(100),
+ color varchar(100),
+ price int,
+ coorx float,
+ coory float,
+ primary key (stock) 
+);
+
+INSERT INTO keylog VALUES ('78771', 'WAURD155', 2001, 'Audi', 'S4', 'White', 10000, 'Service', true);
+INSERT INTO car VALUES ('78771', 'WAURD155', 2001, 'Audi', 'S4', 'White', 10000, 10.0, 15.0);
