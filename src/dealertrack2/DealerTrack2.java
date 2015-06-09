@@ -31,7 +31,16 @@ public class DealerTrack2 {
             
             myResult = myStatement.executeQuery("select * from keylog");
             while(myResult.next()){
-                System.out.println(myResult.getString("stock"));
+                System.out.println("------------------------------------");
+                System.out.println("Stock #: " + myResult.getString("stock"));
+                System.out.println("VIN: " + myResult.getString("vin"));
+                System.out.println("Year: " + myResult.getString("year"));
+                System.out.println("Make: " + myResult.getString("make"));
+                System.out.println("Model: " + myResult.getString("model"));
+                System.out.println("Color: " + myResult.getString("color"));
+                System.out.println("Price: " + myResult.getString("price"));
+                System.out.println("Location: " + myResult.getString("location"));
+                System.out.println("Sales status: " + myResult.getString("salesstatus"));
             }
         } catch (Exception e){
             e.printStackTrace();
