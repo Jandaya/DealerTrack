@@ -49,7 +49,7 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel2.setTransferHandler(new TransferHandler("icon"));
         jLabel1.setTransferHandler(new TransferHandler("icon"));
         jButton1.setTransferHandler(new TransferHandler("icon"));
-        
+        // set text fields
         jTextField1.setText(stock);
         jTextField2.setText(year);
         jTextField3.setText(make);

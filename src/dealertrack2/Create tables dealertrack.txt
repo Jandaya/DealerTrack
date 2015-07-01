@@ -25,4 +25,5 @@ create table car (
 );
 
 INSERT INTO keylog VALUES ('78771', 'WAURD155', 2001, 'Audi', 'S4', 'White', 10000, 'Service', true);
+INSERT INTO keylog VALUES ('78772', 'WAURD156', 1989, 'Nissan', 'Skyline GTR', 'grey', 20000, 'Sales', true);
 INSERT INTO car VALUES ('78771', 'WAURD155', 2001, 'Audi', 'S4', 'White', 10000, 10.0, 15.0);
