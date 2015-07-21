@@ -4,10 +4,12 @@
  * and open the template in the editor.
  */
 package dealertrack2;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.Component;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -15,6 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,32 +37,47 @@ public class MainWindow extends javax.swing.JFrame {
      */
     boolean isTrue = false;
     String stock, year, make, model, color, VIN;
+    int carID;
+    
+    List<String> stockList = new ArrayList<String>();
+    List<Integer> yearList = new ArrayList<Integer>();
+    List<String> makeList = new ArrayList<String>();
+    List<String> modelList = new ArrayList<String>();
+    List<String> colorList = new ArrayList<String>();
+    List<String> vinList = new ArrayList<String>();
+    
+    
+    
+    
     public MainWindow() throws SQLException {
         
         setConnection();
+        int i = 0;
+        Iterator it = stockList.iterator();
+        while(it.hasNext()){
+            System.out.println("\n\nWriting: " + it.next());
+            i++;
+        }
         
         initComponents();
+        buildJpanels();
+
         jButton1.setFocusable(false);
+        jButton2.setFocusable(false);
         
         MouseListener listener = new DragMouseAdapter();
         jLabel1.addMouseListener(listener);
         
-        jLabel2.setFocusable(false);
-        
-        jLabel2.setTransferHandler(new TransferHandler("icon"));
         jLabel1.setTransferHandler(new TransferHandler("icon"));
         jButton1.setTransferHandler(new TransferHandler("icon"));
-        // set text fields
-        jTextField1.setText(stock);
-        jTextField2.setText(year);
-        jTextField3.setText(make);
-        jTextField4.setText(model);
-        jTextField5.setText(color);
-        jTextField6.setText(VIN);
+        jButton2.setTransferHandler(new TransferHandler("icon"));
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         
+    }
+    private void buildJpanels(){
+        jPanel1.setBackground(Color.BLUE);
     }
     
     class DragMouseAdapter extends MouseAdapter{
@@ -81,9 +99,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
         jInternalFrame1 = new javax.swing.JInternalFrame();
         jTextField1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -95,26 +111,23 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        submitButton = new javax.swing.JButton();
         jTextField6 = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dealertrack2/car4.png"))); // NOI18N
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jLabel1MousePressed(evt);
-            }
-        });
 
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton1MousePressed(evt);
             }
         });
-
-        jLabel2.setText("TestLabel");
 
         jInternalFrame1.setClosable(true);
         jInternalFrame1.setIconifiable(true);
@@ -139,7 +152,12 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel7.setText("VIN");
 
-        jButton2.setText("Submit");
+        submitButton.setText("Submit");
+        submitButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                submitButtonMousePressed(evt);
+            }
+        });
 
         jTextField6.setToolTipText("");
 
@@ -153,7 +171,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jInternalFrame1Layout.createSequentialGroup()
                         .addContainerGap(219, Short.MAX_VALUE)
-                        .addComponent(jButton2))
+                        .addComponent(submitButton))
                     .addGroup(jInternalFrame1Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,41 +223,78 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
                 .addGap(28, 28, 28)
-                .addComponent(jButton2)
+                .addComponent(submitButton)
+                .addContainerGap(191, Short.MAX_VALUE))
+        );
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dealertrack2/car4.png"))); // NOI18N
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel1MousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel1MouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(22, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton2MousePressed(evt);
+            }
+        });
+
+        jMenu1.setText("File");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(78, 78, 78)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(91, 91, 91)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(256, 256, 256)
-                        .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(325, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(483, Short.MAX_VALUE)
+                .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(98, 98, 98))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jLabel2))
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(44, 44, 44)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
+                .addGap(7, 7, 7)
                 .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(380, Short.MAX_VALUE))
+                .addContainerGap(130, Short.MAX_VALUE))
         );
 
         pack();
@@ -251,6 +306,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void jLabel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MousePressed
         // TODO add your handling code here:
+        /*
         if(isTrue){
             isTrue = false;
             jInternalFrame1.setVisible(false);
@@ -258,22 +314,58 @@ public class MainWindow extends javax.swing.JFrame {
         else
         {
             isTrue = true;
+            
             jInternalFrame1.setVisible(true);
         }
+        */
     }//GEN-LAST:event_jLabel1MousePressed
+
+    private void jLabel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseReleased
+        // TODO add your handling code here:
+        jLabel1.setText("Released");
+    }//GEN-LAST:event_jLabel1MouseReleased
 
     private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
         // TODO add your handling code here:
-        if(isTrue){
-            isTrue = false;
-            jInternalFrame1.setVisible(false);
-        }
-        else
-        {
+       
             isTrue = true;
+            carID = 0;
+           /* jTextField1.setText(stockList.get(0));
+            jTextField2.setText(Integer.toString(yearList.get(0)));
+            jTextField3.setText(makeList.get(0));
+            jTextField4.setText(modelList.get(0));
+            jTextField5.setText(colorList.get(0));
+            jTextField6.setText(vinList.get(0));
+            */
+            setTextFields(stockList.get(0), yearList.get(0), makeList.get(0), modelList.get(0), colorList.get(0), vinList.get(0));
             jInternalFrame1.setVisible(true);
-        }
     }//GEN-LAST:event_jButton1MousePressed
+
+    private void jButton2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MousePressed
+        // TODO add your handling code here:
+      
+            isTrue = true;
+            carID = 1;
+            /*jTextField1.setText(stockList.get(1));
+            jTextField2.setText(Integer.toString(yearList.get(1)));
+            jTextField3.setText(makeList.get(1));
+            jTextField4.setText(modelList.get(1));
+            jTextField5.setText(colorList.get(1));
+            jTextField6.setText(vinList.get(1));
+            */
+            setTextFields(stockList.get(1), yearList.get(1), makeList.get(1), modelList.get(1), colorList.get(1), vinList.get(1));
+            jInternalFrame1.setVisible(true);
+     
+    }//GEN-LAST:event_jButton2MousePressed
+
+    private void submitButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submitButtonMousePressed
+        try {
+            // TODO add your handling code here:
+            updateQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_submitButtonMousePressed
 
     /**
      * @param args the command line arguments
@@ -314,6 +406,99 @@ public class MainWindow extends javax.swing.JFrame {
         });
     }
     
+    public void initLists( ){
+        
+    }
+    
+    public void clearLists(){
+        stockList.clear();
+        yearList.clear();
+        makeList.clear();
+        modelList.clear();
+        colorList.clear();
+        vinList.clear();
+        
+    }
+    private void setTextFields(String sl, int yl, String mal, String mol, String cl, String vl)
+    {
+        jTextField1.setText(sl);
+        jTextField2.setText(Integer.toString(yl));
+        jTextField3.setText(mal);
+        jTextField4.setText(mol);
+        jTextField5.setText(cl);
+        jTextField6.setText(vl);
+    }
+    
+    private void updateQuery() throws SQLException{
+        Connection myConnection = null;
+        Statement myStatement = null;
+        ResultSet myResult = null;
+        
+        String user = "root";
+        String pass = "";
+        String temp1, temp2, temp3, temp4, temp5, temp6;
+        
+        try {
+            myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/DealerTrack", user, pass);
+            
+            myStatement = myConnection.createStatement();
+            temp1 = jTextField1.getText();
+            temp2 = jTextField2.getText();
+            temp3 = jTextField3.getText();
+            temp4 = jTextField4.getText();
+            temp5 = jTextField5.getText();
+            temp6 = jTextField6.getText();
+            
+            
+            //myStatement.executeUpdate("update car set year = 2000 where carid = "+carID);
+             myStatement.executeUpdate("update car set year = " + temp2 + ", make = '" + temp3 + "', model = '" + temp4 + "', color = '" + temp5 + "', vin = '" + temp6+ "' where carid = "+ carID);
+             //myStatement.executeUpdate("update car set stock = " + temp1 + " where carid = "+carID);
+            // myStatement.executeUpdate("update car set make = '" + temp3 + "' where carid = "+carID);
+             /*
+             myStatement.executeUpdate("update car set model = " + temp4 + " where carid = "+carID);
+             myStatement.executeUpdate("update car set color = " + temp5 + " where carid = "+carID);
+             myStatement.executeUpdate("update car set vin = " + temp6 + " where carid = "+carID);
+            */
+            clearLists();
+            myResult = myStatement.executeQuery("select * from car");
+            while(myResult.next()){
+                stock = myResult.getString("stock");
+                stockList.add(stock);
+                
+                
+                year = myResult.getString("year");
+                yearList.add(Integer.parseInt(year));
+                
+                make = myResult.getString("make");
+                makeList.add(make);
+                
+                model = myResult.getString("model");
+                modelList.add(model);
+                
+                color = myResult.getString("color");
+                colorList.add(color);
+                
+                VIN = myResult.getString("vin");
+                vinList.add(VIN);
+
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally{
+            if(myResult != null){
+                myResult.close();
+            }
+            if(myStatement != null){
+                myStatement.close();
+            }
+            if(myConnection != null){
+                myConnection.close();
+            }
+            
+        }
+        
+    }
+    
     private void setConnection() throws SQLException{
         Connection myConnection = null;
         Statement myStatement = null;
@@ -328,25 +513,27 @@ public class MainWindow extends javax.swing.JFrame {
             myStatement = myConnection.createStatement();
             
             
-            myResult = myStatement.executeQuery("select * from keylog");
+            myResult = myStatement.executeQuery("select * from car");
             while(myResult.next()){
                 stock = myResult.getString("stock");
-                year = myResult.getString("year");
-                make = myResult.getString("make");
-                model = myResult.getString("model");
-                color = myResult.getString("color");
-                VIN = myResult.getString("vin");
+                stockList.add(stock);
                 
-                System.out.println("------------------------------------");
-                System.out.println("Stock #: " + stock);
-                System.out.println("VIN: " + myResult.getString("vin"));
-                System.out.println("Year: " + myResult.getString("year"));
-                System.out.println("Make: " + myResult.getString("make"));
-                System.out.println("Model: " + myResult.getString("model"));
-                System.out.println("Color: " + myResult.getString("color"));
-                System.out.println("Price: " + myResult.getString("price"));
-                System.out.println("Location: " + myResult.getString("location"));
-                System.out.println("Sales status: " + myResult.getString("salesstatus"));
+                
+                year = myResult.getString("year");
+                yearList.add(Integer.parseInt(year));
+                
+                make = myResult.getString("make");
+                makeList.add(make);
+                
+                model = myResult.getString("model");
+                modelList.add(model);
+                
+                color = myResult.getString("color");
+                colorList.add(color);
+                
+                VIN = myResult.getString("vin");
+                vinList.add(VIN);
+                
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -368,13 +555,16 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
@@ -382,6 +572,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    private javax.swing.JButton submitButton;
     // End of variables declaration//GEN-END:variables
 }
 
