@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.Component;
 import java.awt.Image;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -23,10 +24,12 @@ import java.util.*;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
+
 /**
  *
  * @author Joseph
@@ -47,6 +50,11 @@ public class MainWindow extends javax.swing.JFrame {
     List<String> colorList = new ArrayList<String>();
     List<String> vinList = new ArrayList<String>();
     
+    // for the file chooser
+    
+    JFileChooser fc = new JFileChooser();
+    File thumbnailFile;
+    String selectedFile;
     
     
     
@@ -120,6 +128,8 @@ public class MainWindow extends javax.swing.JFrame {
         submitButton = new javax.swing.JButton();
         jTextField6 = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
+        thumbnailImage = new javax.swing.JLabel();
+        thumbnailAddButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
@@ -129,9 +139,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jButton1MousePressed(evt);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -159,9 +169,9 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel7.setText("VIN");
 
         submitButton.setText("Submit");
-        submitButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                submitButtonMousePressed(evt);
+        submitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitButtonActionPerformed(evt);
             }
         });
 
@@ -169,42 +179,55 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel8.setText("Year");
 
+        thumbnailAddButton.setText("Add Photo");
+        thumbnailAddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                thumbnailAddButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
         jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
         jInternalFrame1Layout.setHorizontalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalFrame1Layout.createSequentialGroup()
-                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                        .addContainerGap(219, Short.MAX_VALUE)
-                        .addComponent(submitButton))
-                    .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
+                .addGap(27, 27, 27)
+                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel4)
+                        .addComponent(jLabel5)
                         .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel5)
-                                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel6)))
-                            .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(jLabel8)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField3)
-                            .addComponent(jTextField4)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                            .addComponent(jTextField6))))
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6)))
+                    .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(jLabel8)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                        .addComponent(thumbnailAddButton)
+                        .addGap(27, 27, 27)
+                        .addComponent(submitButton))
+                    .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                        .addComponent(jTextField2)
+                        .addComponent(jTextField3)
+                        .addComponent(jTextField4)
+                        .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                        .addComponent(jTextField6)))
                 .addGap(63, 63, 63))
+            .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                .addGap(98, 98, 98)
+                .addComponent(thumbnailImage)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jInternalFrame1Layout.setVerticalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                .addGap(91, 91, 91)
+                .addGap(39, 39, 39)
+                .addComponent(thumbnailImage)
+                .addGap(52, 52, 52)
                 .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
@@ -229,8 +252,10 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
                 .addGap(28, 28, 28)
-                .addComponent(submitButton)
-                .addContainerGap(231, Short.MAX_VALUE))
+                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(submitButton)
+                    .addComponent(thumbnailAddButton))
+                .addContainerGap(174, Short.MAX_VALUE))
         );
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dealertrack2/car1.png"))); // NOI18N
@@ -261,9 +286,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jButton2MousePressed(evt);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -286,8 +311,8 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(483, Short.MAX_VALUE)
-                .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(536, Short.MAX_VALUE)
+                .addComponent(jInternalFrame1)
                 .addGap(98, 98, 98))
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -299,9 +324,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
-                .addGap(7, 7, 7)
+                .addGap(66, 66, 66)
                 .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(94, Short.MAX_VALUE))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
 
         pack();
@@ -332,10 +357,9 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1.setText("Released");
     }//GEN-LAST:event_jLabel1MouseReleased
 
-    private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-       
-            isTrue = true;
+        isTrue = true;
             carID = 0;
            /* jTextField1.setText(stockList.get(0));
             jTextField2.setText(Integer.toString(yearList.get(0)));
@@ -346,12 +370,11 @@ public class MainWindow extends javax.swing.JFrame {
             */
             setTextFields(stockList.get(0), yearList.get(0), makeList.get(0), modelList.get(0), colorList.get(0), vinList.get(0));
             jInternalFrame1.setVisible(true);
-    }//GEN-LAST:event_jButton1MousePressed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MousePressed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-      
-            isTrue = true;
+        isTrue = true;
             carID = 1;
             /*jTextField1.setText(stockList.get(1));
             jTextField2.setText(Integer.toString(yearList.get(1)));
@@ -362,17 +385,36 @@ public class MainWindow extends javax.swing.JFrame {
             */
             setTextFields(stockList.get(1), yearList.get(1), makeList.get(1), modelList.get(1), colorList.get(1), vinList.get(1));
             jInternalFrame1.setVisible(true);
-     
-    }//GEN-LAST:event_jButton2MousePressed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void submitButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submitButtonMousePressed
+    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
+        // TODO add your handling code here:
         try {
             // TODO add your handling code here:
             updateQuery();
         } catch (SQLException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_submitButtonMousePressed
+    }//GEN-LAST:event_submitButtonActionPerformed
+
+    private void thumbnailAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thumbnailAddButtonActionPerformed
+        // TODO add your handling code here:
+        int returnVal = fc.showOpenDialog(null);
+        
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            thumbnailFile  = fc.getSelectedFile();
+            selectedFile = thumbnailFile.getPath();
+            System.out.println(selectedFile);
+            
+            ImageIcon thumbnailPic = new ImageIcon(selectedFile); //getClass().getResource(selectedFile));
+            Image ti = thumbnailPic.getImage();
+            Image thumbnail = ti.getScaledInstance(128, 96, Image.SCALE_SMOOTH);
+            thumbnailPic = new ImageIcon(thumbnail);
+            thumbnailImage.setIcon(thumbnailPic);
+           
+        }
+    }//GEN-LAST:event_thumbnailAddButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -580,6 +622,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JButton submitButton;
+    private javax.swing.JButton thumbnailAddButton;
+    private javax.swing.JLabel thumbnailImage;
     // End of variables declaration//GEN-END:variables
 }
 
