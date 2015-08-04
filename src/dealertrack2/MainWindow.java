@@ -40,8 +40,11 @@ public class MainWindow extends javax.swing.JFrame {
      * Creates new form MainWindow
      */
     boolean isTrue = false;
-    String stock, year, make, model, color, VIN;
+    String carid, stock, year, make, model, color, VIN;
     int carID;
+    
+    Car car = new Car();
+    List<Car> carList = new ArrayList<Car>();
     
     List<String> stockList = new ArrayList<String>();
     List<Integer> yearList = new ArrayList<Integer>();
@@ -63,9 +66,13 @@ public class MainWindow extends javax.swing.JFrame {
         setConnection();
         int i = 0;
         Iterator it = stockList.iterator();
-        while(it.hasNext()){
-            System.out.println("\n\nWriting: " + it.next());
+        Iterator ia = carList.iterator();
+        while(ia.hasNext()){
+        
+            System.out.println("\n\nWriting: " + carList.get(i).getStock());
+            ia.next();
             i++;
+            
         }
         
         initComponents();
@@ -76,10 +83,14 @@ public class MainWindow extends javax.swing.JFrame {
         
         MouseListener listener = new DragMouseAdapter();
         jLabel1.addMouseListener(listener);
+        jButton3.addMouseListener(listener);
         
+        jButton3.setTransferHandler(new TransferHandler("icon"));
         jLabel1.setTransferHandler(new TransferHandler("icon"));
         jButton1.setTransferHandler(new TransferHandler("icon"));
         jButton2.setTransferHandler(new TransferHandler("icon"));
+        
+        setCarIcons();
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -92,6 +103,7 @@ public class MainWindow extends javax.swing.JFrame {
         Image newimg = img.getScaledInstance(30, 40,  java.awt.Image.SCALE_SMOOTH ) ;  
         carImage = new ImageIcon( newimg );
         jLabel1.setIcon(carImage);
+        jButton3.setIcon(carImage);
     }
     
     class DragMouseAdapter extends MouseAdapter{
@@ -99,6 +111,14 @@ public class MainWindow extends javax.swing.JFrame {
         public void mousePressed(MouseEvent e) {
             JComponent c = (JComponent) e.getSource();
             TransferHandler handler = c.getTransferHandler();
+            
+            // car image
+            ImageIcon carImage = new ImageIcon(getClass().getResource("/dealertrack2/car1.png"));
+            Image img = carImage.getImage() ;  
+            Image newimg = img.getScaledInstance(30, 40,  java.awt.Image.SCALE_SMOOTH ) ;  
+            carImage = new ImageIcon( newimg );
+            handler.setDragImage(newimg);
+            //c.setEnabled(true);
             handler.exportAsDrag(c, e, TransferHandler.COPY);
         }
     }
@@ -130,14 +150,20 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         thumbnailImage = new javax.swing.JLabel();
         thumbnailAddButton = new javax.swing.JButton();
+        clearButton = new javax.swing.JButton();
+        errorLabel = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        searchField = new javax.swing.JTextField();
+        searchButton = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -186,48 +212,65 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        clearButton.setText("Clear");
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
+
+        errorLabel.setForeground(new java.awt.Color(255, 0, 0));
+
         javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
         jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
         jInternalFrame1Layout.setHorizontalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalFrame1Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel3)
-                        .addComponent(jLabel4)
-                        .addComponent(jLabel5)
-                        .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel6)))
-                    .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(jLabel8)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                        .addComponent(thumbnailAddButton)
-                        .addGap(27, 27, 27)
-                        .addComponent(submitButton))
-                    .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                        .addComponent(jTextField2)
-                        .addComponent(jTextField3)
-                        .addComponent(jTextField4)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                        .addComponent(jTextField6)))
-                .addGap(63, 63, 63))
             .addGroup(jInternalFrame1Layout.createSequentialGroup()
                 .addGap(98, 98, 98)
                 .addComponent(thumbnailImage)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalFrame1Layout.createSequentialGroup()
+                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                        .addGap(166, 166, 166)
+                        .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel5)
+                                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel6)))
+                            .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(jLabel8)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                                .addComponent(thumbnailAddButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(errorLabel)
+                            .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                                .addComponent(jTextField2)
+                                .addComponent(jTextField3)
+                                .addComponent(jTextField4)
+                                .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                                .addComponent(jTextField6)))))
+                .addGap(63, 63, 63))
         );
         jInternalFrame1Layout.setVerticalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jInternalFrame1Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addComponent(thumbnailImage)
-                .addGap(52, 52, 52)
+                .addGap(32, 32, 32)
+                .addComponent(errorLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
@@ -251,11 +294,13 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addGap(28, 28, 28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(submitButton)
-                    .addComponent(thumbnailAddButton))
-                .addContainerGap(174, Short.MAX_VALUE))
+                    .addComponent(thumbnailAddButton)
+                    .addComponent(submitButton))
+                .addGap(18, 18, 18)
+                .addComponent(clearButton)
+                .addContainerGap(225, Short.MAX_VALUE))
         );
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dealertrack2/car1.png"))); // NOI18N
@@ -269,6 +314,16 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        searchField.setForeground(new java.awt.Color(153, 153, 153));
+        searchField.setText("Enter Stock #");
+
+        searchButton.setText("Search");
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -276,6 +331,12 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(81, 81, 81)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(82, 82, 82)
+                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(searchButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -284,6 +345,16 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchButton))
+                .addGap(37, 37, 37))
         );
 
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -311,7 +382,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(536, Short.MAX_VALUE)
+                .addContainerGap(539, Short.MAX_VALUE)
                 .addComponent(jInternalFrame1)
                 .addGap(98, 98, 98))
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -324,9 +395,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
-                .addGap(66, 66, 66)
+                .addGap(1, 1, 1)
                 .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         pack();
@@ -359,8 +430,10 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        errorLabel.setText(null);
         isTrue = true;
             carID = 0;
+            carid = "0";
            /* jTextField1.setText(stockList.get(0));
             jTextField2.setText(Integer.toString(yearList.get(0)));
             jTextField3.setText(makeList.get(0));
@@ -368,14 +441,17 @@ public class MainWindow extends javax.swing.JFrame {
             jTextField5.setText(colorList.get(0));
             jTextField6.setText(vinList.get(0));
             */
-            setTextFields(stockList.get(0), yearList.get(0), makeList.get(0), modelList.get(0), colorList.get(0), vinList.get(0));
+            thumbnailImage.setIcon(null);
+            setTextFields(carList.get(0).getStock(), carList.get(0).getYear(), carList.get(0).getMake(), carList.get(0).getModel(), carList.get(0).getColor(), carList.get(0).getVIN());
             jInternalFrame1.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        errorLabel.setText(null);
         isTrue = true;
             carID = 1;
+            carid = "1";
             /*jTextField1.setText(stockList.get(1));
             jTextField2.setText(Integer.toString(yearList.get(1)));
             jTextField3.setText(makeList.get(1));
@@ -383,7 +459,8 @@ public class MainWindow extends javax.swing.JFrame {
             jTextField5.setText(colorList.get(1));
             jTextField6.setText(vinList.get(1));
             */
-            setTextFields(stockList.get(1), yearList.get(1), makeList.get(1), modelList.get(1), colorList.get(1), vinList.get(1));
+            thumbnailImage.setIcon(null);
+            setTextFields(carList.get(1).getStock(), carList.get(1).getYear(), carList.get(1).getMake(), carList.get(1).getModel(), carList.get(1).getColor(), carList.get(1).getVIN());
             jInternalFrame1.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -415,6 +492,26 @@ public class MainWindow extends javax.swing.JFrame {
            
         }
     }//GEN-LAST:event_thumbnailAddButtonActionPerformed
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        // TODO add your handling code here:
+        String search = searchField.getText();
+        ImageIcon carImage = new ImageIcon(getClass().getResource("/dealertrack2/car3.png"));
+        Image img = carImage.getImage() ;  
+        Image newimg = img.getScaledInstance(40, 43,  java.awt.Image.SCALE_SMOOTH ) ;  
+        carImage = new ImageIcon( newimg );
+        
+        if (search.equals(carList.get(0).getStock())){
+            jButton1.setIcon(carImage);
+            setTextFields(carList.get(0).getStock(), carList.get(0).getYear(), carList.get(0).getMake(), carList.get(0).getModel(), carList.get(0).getColor(), carList.get(0).getVIN());
+           
+        }
+    }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        // TODO add your handling code here:
+        setTextFields(null,0,null,null,null,null);
+    }//GEN-LAST:event_clearButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -478,6 +575,52 @@ public class MainWindow extends javax.swing.JFrame {
         jTextField6.setText(vl);
     }
     
+    public void setCarIcons(){
+        Iterator ia = carList.iterator();
+        int i = 0;
+        
+        ImageIcon carImage = new ImageIcon(getClass().getResource("/dealertrack2/car1.png"));
+        Image img = carImage.getImage() ;  
+        Image newimg = img.getScaledInstance(30, 40,  java.awt.Image.SCALE_SMOOTH ) ;  
+        carImage = new ImageIcon( newimg );
+        
+        while(ia.hasNext()){
+        
+            if (carList.get(0).getCarID().equals("0") && !(carList.get(0).getStock().equals("none")))
+            {
+                jButton1.setIcon(carImage);
+            }
+            if (carList.get(1).getCarID().equals("1") && !(carList.get(1).getStock().equals("none")))
+            {
+                jButton2.setIcon(carImage);
+            }
+            ia.next();
+            i++;
+            
+        }
+    }
+    
+    public boolean checkStock(String stockNo){
+        Iterator ib = carList.iterator();
+        int i = 0;
+        
+        while(ib.hasNext()){
+            /*
+            if(carList.get(i).getStock() == null)
+            {
+                return false;
+            }*/
+            if(!(carid.equals(carList.get(i).getCarID()))){
+                if(stockNo.equals(carList.get(i).getStock())){
+                    return false;
+                }
+            }
+            ib.next();
+            i++;
+        }
+        return true;
+    }
+    
     private void updateQuery() throws SQLException{
         Connection myConnection = null;
         Statement myStatement = null;
@@ -492,6 +635,11 @@ public class MainWindow extends javax.swing.JFrame {
             
             myStatement = myConnection.createStatement();
             temp1 = jTextField1.getText();
+            if (temp1.isEmpty())
+            {
+                System.out.println("in null");
+                temp1 = "0";
+            }
             temp2 = jTextField2.getText();
             temp3 = jTextField3.getText();
             temp4 = jTextField4.getText();
@@ -500,36 +648,68 @@ public class MainWindow extends javax.swing.JFrame {
             
             
             //myStatement.executeUpdate("update car set year = 2000 where carid = "+carID);
-             myStatement.executeUpdate("update car set year = " + temp2 + ", make = '" + temp3 + "', model = '" + temp4 + "', color = '" + temp5 + "', vin = '" + temp6+ "' where carid = "+ carID);
-             //myStatement.executeUpdate("update car set stock = " + temp1 + " where carid = "+carID);
-            // myStatement.executeUpdate("update car set make = '" + temp3 + "' where carid = "+carID);
-             /*
-             myStatement.executeUpdate("update car set model = " + temp4 + " where carid = "+carID);
-             myStatement.executeUpdate("update car set color = " + temp5 + " where carid = "+carID);
-             myStatement.executeUpdate("update car set vin = " + temp6 + " where carid = "+carID);
-            */
-            clearLists();
-            myResult = myStatement.executeQuery("select * from car");
-            while(myResult.next()){
-                stock = myResult.getString("stock");
-                stockList.add(stock);
-                
-                
-                year = myResult.getString("year");
-                yearList.add(Integer.parseInt(year));
-                
-                make = myResult.getString("make");
-                makeList.add(make);
-                
-                model = myResult.getString("model");
-                modelList.add(model);
-                
-                color = myResult.getString("color");
-                colorList.add(color);
-                
-                VIN = myResult.getString("vin");
-                vinList.add(VIN);
+            
+            if (checkStock(temp1)){
+                myStatement.executeUpdate("update car set stock = "+ temp1 +", year = " + temp2 + ", make = '" + temp3 + "', model = '" + temp4 + "', color = '" + temp5 + "', vin = '" + temp6+ "' where carid = "+ carID);
+            
 
+                //myStatement.executeUpdate("update car set stock = " + temp1 + " where carid = "+carID);
+                // myStatement.executeUpdate("update car set make = '" + temp3 + "' where carid = "+carID);
+                 /*
+                 myStatement.executeUpdate("update car set model = " + temp4 + " where carid = "+carID);
+                 myStatement.executeUpdate("update car set color = " + temp5 + " where carid = "+carID);
+                 myStatement.executeUpdate("update car set vin = " + temp6 + " where carid = "+carID);
+                */
+                clearLists();
+                myResult = myStatement.executeQuery("select * from car");
+
+                // clear car
+                carList.clear();
+                while(myResult.next()){
+                    
+                    /*
+                    carid = myResult.getString("carid");
+                    int caridtemp;
+                    caridtemp = Integer.parseInt(carid);
+                    */
+                    stock = myResult.getString("stock");
+                    //stockList.add(stock);
+
+
+
+                    year = myResult.getString("year");
+                    //yearList.add(Integer.parseInt(year));
+                    int year2;
+                    year2 = Integer.parseInt(year);
+
+                    make = myResult.getString("make");
+                    //makeList.add(make);
+
+                    model = myResult.getString("model");
+                    //modelList.add(model);
+
+                    color = myResult.getString("color");
+                    //colorList.add(color);
+
+                    VIN = myResult.getString("vin");
+                    //vinList.add(VIN);
+
+                    // test for car obj
+                    car = new Car();
+                    //car.setCarID(carid);
+                    car.setStock(stock);
+                    car.setYear(year2);
+                    car.setMake(make);
+                    car.setModel(model);
+                    car.setColor(color);
+                    car.setVIN(VIN);
+                    carList.add(car);
+
+                }
+            }
+            else
+            {
+                errorLabel.setText("Stock number exists, please try again.");
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -564,24 +744,43 @@ public class MainWindow extends javax.swing.JFrame {
             
             myResult = myStatement.executeQuery("select * from car");
             while(myResult.next()){
+                carid = myResult.getString("carid");
+                int caridtemp;
+                caridtemp = Integer.parseInt(carid);
+                
+                
                 stock = myResult.getString("stock");
-                stockList.add(stock);
+                //stockList.add(stock);
+                
                 
                 
                 year = myResult.getString("year");
-                yearList.add(Integer.parseInt(year));
+                //yearList.add(Integer.parseInt(year));
+                int year2;
+                year2 = Integer.parseInt(year);
                 
                 make = myResult.getString("make");
-                makeList.add(make);
+                //makeList.add(make);
                 
                 model = myResult.getString("model");
-                modelList.add(model);
+                //modelList.add(model);
                 
                 color = myResult.getString("color");
-                colorList.add(color);
+                //colorList.add(color);
                 
                 VIN = myResult.getString("vin");
-                vinList.add(VIN);
+                //vinList.add(VIN);
+                
+                // test for car obj
+                car = new Car();
+                car.setCarID(carid);
+                car.setStock(stock);
+                car.setYear(year2);
+                car.setMake(make);
+                car.setModel(model);
+                car.setColor(color);
+                car.setVIN(VIN);
+                carList.add(car);
                 
             }
         } catch (Exception e){
@@ -600,8 +799,11 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton clearButton;
+    private javax.swing.JLabel errorLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
@@ -621,6 +823,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    private javax.swing.JButton searchButton;
+    private javax.swing.JTextField searchField;
     private javax.swing.JButton submitButton;
     private javax.swing.JButton thumbnailAddButton;
     private javax.swing.JLabel thumbnailImage;

@@ -11,19 +11,22 @@ create table keylog (
  primary key (stock) 
 );
 
-create table car ( 
+
+create table car (
+ carid int, 
  stock char(10),
- vin varchar(100), 
+ vin char(100), 
  year int,
- make varchar(100),
- model varchar(100),
- color varchar(100),
+ make char(100),
+ model char(100),
+ color char(100),
  price int,
  coorx float,
  coory float,
- primary key (stock) 
+ primary key (carid) 
 );
 
 INSERT INTO keylog VALUES ('78771', 'WAURD155', 2001, 'Audi', 'S4', 'White', 10000, 'Service', true);
 INSERT INTO keylog VALUES ('78772', 'WAURD156', 1989, 'Nissan', 'Skyline GTR', 'grey', 20000, 'Sales', true);
-INSERT INTO car VALUES ('78771', 'WAURD155', 2001, 'Audi', 'S4', 'White', 10000, 10.0, 15.0);
+INSERT INTO car VALUES (0, '78771', 'WAURD155', 2001, 'Audi', 'S4', 'White', 10000, 10.0, 15.0);
+INSERT INTO car VALUES (1, '78772', 'WAURD156', 1989, 'Nissan', 'Skyline GTR', 'grey', 20000, 10.0, 15.0);
