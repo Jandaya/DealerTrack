@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package dealertrack2;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
@@ -20,12 +21,16 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.*;
+import java.awt.GridLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
@@ -43,16 +48,12 @@ public class MainWindow extends javax.swing.JFrame {
     String carid, stock, year, make, model, color, VIN;
     int carID;
     
+    int carCount;
+    
     Car car = new Car();
     List<Car> carList = new ArrayList<Car>();
     
-    List<String> stockList = new ArrayList<String>();
-    List<Integer> yearList = new ArrayList<Integer>();
-    List<String> makeList = new ArrayList<String>();
-    List<String> modelList = new ArrayList<String>();
-    List<String> colorList = new ArrayList<String>();
-    List<String> vinList = new ArrayList<String>();
-    
+    List<JLabel> spotList = new ArrayList<JLabel>();
     // for the file chooser
     
     JFileChooser fc = new JFileChooser();
@@ -65,7 +66,6 @@ public class MainWindow extends javax.swing.JFrame {
         
         setConnection();
         int i = 0;
-        Iterator it = stockList.iterator();
         Iterator ia = carList.iterator();
         while(ia.hasNext()){
         
@@ -74,7 +74,7 @@ public class MainWindow extends javax.swing.JFrame {
             i++;
             
         }
-        
+        setBackground2();
         initComponents();
         buildJpanels();
 
@@ -83,14 +83,13 @@ public class MainWindow extends javax.swing.JFrame {
         
         MouseListener listener = new DragMouseAdapter();
         jLabel1.addMouseListener(listener);
-        jButton3.addMouseListener(listener);
-        
-        jButton3.setTransferHandler(new TransferHandler("icon"));
+
         jLabel1.setTransferHandler(new TransferHandler("icon"));
         jButton1.setTransferHandler(new TransferHandler("icon"));
         jButton2.setTransferHandler(new TransferHandler("icon"));
         
         setCarIcons();
+        buildLot();
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -103,7 +102,75 @@ public class MainWindow extends javax.swing.JFrame {
         Image newimg = img.getScaledInstance(30, 40,  java.awt.Image.SCALE_SMOOTH ) ;  
         carImage = new ImageIcon( newimg );
         jLabel1.setIcon(carImage);
-        jButton3.setIcon(carImage);
+
+    }
+    
+    public void buildLot(){
+        lot1Panel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        
+        
+        
+        
+        ImageIcon carImage = new ImageIcon(getClass().getResource("/dealertrack2/car11.png"));
+        Image img = carImage.getImage() ;  
+        Image newimg = img.getScaledInstance(40,30,  java.awt.Image.SCALE_SMOOTH ) ;  
+        carImage = new ImageIcon( newimg );
+        carCount = 0;
+        for (carCount = 0; carCount < 2; carCount++){
+            gbc.fill = GridBagConstraints.VERTICAL;
+            gbc.gridx = 0;
+            gbc.gridy = carCount;
+            gbc.gridheight = 1;
+            
+            
+            JLabel spot1 = new JLabel();
+            spot1.setIcon(carImage);
+            spot1.setSize(50,25);
+            String s = Integer.toString(carCount);
+            spot1.addMouseListener(new MouseAdapter(){
+                public void mousePressed(MouseEvent e){
+                    jLabel2.setText("pressed: " + s);
+                    //setTextFields(carList.get(carCount).getStock(), carList.get(carCount).getYear(), carList.get(carCount).getMake(), carList.get(carCount).getModel(), carList.get(carCount).getColor(), carList.get(carCount).getVIN());
+                   // System.out.println(carList.get(carCount).getStock());
+                }
+            });
+            spotList.add(spot1);
+            lot1Panel.add(spot1,gbc);
+            
+        }
+        /*
+        int j = 0;
+        Iterator ia = spotList.iterator();
+        while(ia.hasNext()){
+        
+            System.out.println("\n\nWriting: " + spotList.get(j));
+            
+            ia.next();
+            j++;
+            
+        }*/
+        
+        /*
+        int j = 0;
+        Iterator sl = spotList.iterator();
+        while(sl.hasNext()){
+        
+            
+            sl.next();
+            j++;
+            
+        }*/
+        
+            
+            /*
+            JButton spot1 = new JButton();
+            spot1.setSize(50,25);
+            JButton spot2 = new JButton();
+            spot2.setSize(50,25);
+            lot1Panel.add(spot1);
+            lot1Panel.add(spot2);
+            */
     }
     
     class DragMouseAdapter extends MouseAdapter{
@@ -122,7 +189,26 @@ public class MainWindow extends javax.swing.JFrame {
             handler.exportAsDrag(c, e, TransferHandler.COPY);
         }
     }
+    
+   
 
+    
+    public void setBackground2(){
+        
+        ImageIcon backgroundImg = new ImageIcon(getClass().getResource("/dealertrack2/overhead view.jpg"));
+        Image img = backgroundImg.getImage();  
+        Image newimg = img.getScaledInstance(1380,660, java.awt.Image.SCALE_SMOOTH ) ;  
+        backgroundImg = new ImageIcon( newimg );
+        
+        
+        setLayout(new BorderLayout());
+        setContentPane(new JLabel(backgroundImg));
+        setLayout(new FlowLayout());
+
+        // Just for refresh :) Not optional!
+        setSize(924,950);
+        setSize(925,951);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -154,15 +240,17 @@ public class MainWindow extends javax.swing.JFrame {
         errorLabel = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
         searchField = new javax.swing.JTextField();
         searchButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        lot1Panel = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("DealerTrack");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -247,7 +335,7 @@ public class MainWindow extends javax.swing.JFrame {
                             .addGroup(jInternalFrame1Layout.createSequentialGroup()
                                 .addGap(2, 2, 2)
                                 .addComponent(jLabel8)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                         .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jInternalFrame1Layout.createSequentialGroup()
                                 .addComponent(thumbnailAddButton)
@@ -300,7 +388,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(submitButton))
                 .addGap(18, 18, 18)
                 .addComponent(clearButton)
-                .addContainerGap(225, Short.MAX_VALUE))
+                .addContainerGap(159, Short.MAX_VALUE))
         );
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dealertrack2/car1.png"))); // NOI18N
@@ -324,6 +412,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setText("jLabel2");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -331,12 +421,12 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(81, 81, 81)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(82, 82, 82)
+                .addGap(211, 211, 211)
                 .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(searchButton)
+                .addGap(92, 92, 92)
+                .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -345,15 +435,12 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchButton))
+                    .addComponent(searchButton)
+                    .addComponent(jLabel2))
                 .addGap(37, 37, 37))
         );
 
@@ -362,6 +449,19 @@ public class MainWindow extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+
+        lot1Panel.setOpaque(false);
+
+        javax.swing.GroupLayout lot1PanelLayout = new javax.swing.GroupLayout(lot1Panel);
+        lot1Panel.setLayout(lot1PanelLayout);
+        lot1PanelLayout.setHorizontalGroup(
+            lot1PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 68, Short.MAX_VALUE)
+        );
+        lot1PanelLayout.setVerticalGroup(
+            lot1PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -378,26 +478,32 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(539, Short.MAX_VALUE)
+                .addGap(154, 154, 154)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lot1Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(586, 586, 586)
                 .addComponent(jInternalFrame1)
-                .addGap(98, 98, 98))
+                .addGap(114, 114, 114))
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
-                .addGap(1, 1, 1)
-                .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(66, 66, 66)
+                        .addComponent(lot1Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -506,6 +612,11 @@ public class MainWindow extends javax.swing.JFrame {
             setTextFields(carList.get(0).getStock(), carList.get(0).getYear(), carList.get(0).getMake(), carList.get(0).getModel(), carList.get(0).getColor(), carList.get(0).getVIN());
            
         }
+        else if (search.equals(carList.get(1).getStock())){
+            jButton2.setIcon(carImage);
+            setTextFields(carList.get(1).getStock(), carList.get(1).getYear(), carList.get(1).getMake(), carList.get(1).getModel(), carList.get(1).getColor(), carList.get(1).getVIN());
+           
+        }
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
@@ -557,12 +668,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     public void clearLists(){
-        stockList.clear();
-        yearList.clear();
-        makeList.clear();
-        modelList.clear();
-        colorList.clear();
-        vinList.clear();
+        
         
     }
     private void setTextFields(String sl, int yl, String mal, String mol, String cl, String vl)
@@ -803,9 +909,9 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel errorLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -823,6 +929,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    private javax.swing.JPanel lot1Panel;
     private javax.swing.JButton searchButton;
     private javax.swing.JTextField searchField;
     private javax.swing.JButton submitButton;
