@@ -24,6 +24,8 @@ import java.util.*;
 import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -44,9 +46,9 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
-    boolean isTrue = false;
-    String carid, stock, year, make, model, color, VIN;
-    int carID;
+    private boolean isTrue = false;
+    private String carid, stock, year, make, model, color, VIN;
+    private int carID;
     
     int carCount;
     
@@ -57,8 +59,10 @@ public class MainWindow extends javax.swing.JFrame {
     // for the file chooser
     
     JFileChooser fc = new JFileChooser();
-    File thumbnailFile;
+    public File thumbnailFile;
     String selectedFile;
+    
+    VehicleInfo vehicleInfo = new VehicleInfo();
     
     
     
@@ -90,7 +94,12 @@ public class MainWindow extends javax.swing.JFrame {
         
         setCarIcons();
         buildLot();
-        
+        vehicleInfo.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent windowEvent){
+                vehicleInfo.setVisible(false);
+            }
+        });
+        //vehicleInfo.setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         
@@ -123,46 +132,40 @@ public class MainWindow extends javax.swing.JFrame {
             gbc.gridy = carCount;
             gbc.gridheight = 1;
             
-            
+            System.out.println("asdfL " + carCount);
             JLabel spot1 = new JLabel();
             spot1.setIcon(carImage);
             spot1.setSize(50,25);
             String s = Integer.toString(carCount);
-            spot1.addMouseListener(new MouseAdapter(){
+           /* spot1.addMouseListener(new MouseAdapter(){
                 public void mousePressed(MouseEvent e){
                     jLabel2.setText("pressed: " + s);
                     //setTextFields(carList.get(carCount).getStock(), carList.get(carCount).getYear(), carList.get(carCount).getMake(), carList.get(carCount).getModel(), carList.get(carCount).getColor(), carList.get(carCount).getVIN());
-                   // System.out.println(carList.get(carCount).getStock());
+                    //System.out.println(carList.get(carCount).getStock());
+                    
                 }
-            });
+            });*/
             spotList.add(spot1);
             lot1Panel.add(spot1,gbc);
             
         }
-        /*
+        
         int j = 0;
         Iterator ia = spotList.iterator();
+        carCount = 0;
         while(ia.hasNext()){
         
-            System.out.println("\n\nWriting: " + spotList.get(j));
-            
+            spotList.get(j).addMouseListener(new MouseAdapter(){
+                public void mousePressed(MouseEvent e){
+                    System.out.println("pressed: " + carCount++);
+                }
+            });
+            //carCount++;
             ia.next();
             j++;
             
-        }*/
-        
-        /*
-        int j = 0;
-        Iterator sl = spotList.iterator();
-        while(sl.hasNext()){
-        
-            
-            sl.next();
-            j++;
-            
-        }*/
-        
-            
+        }
+  
             /*
             JButton spot1 = new JButton();
             spot1.setSize(50,25);
@@ -171,6 +174,11 @@ public class MainWindow extends javax.swing.JFrame {
             lot1Panel.add(spot1);
             lot1Panel.add(spot2);
             */
+    }
+    
+    private void spot1MousePressed(MouseEvent e, int count){
+        
+        
     }
     
     class DragMouseAdapter extends MouseAdapter{
@@ -252,7 +260,9 @@ public class MainWindow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DealerTrack");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setResizable(false);
 
+        jButton1.setOpaque(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -388,7 +398,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(submitButton))
                 .addGap(18, 18, 18)
                 .addComponent(clearButton)
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dealertrack2/car1.png"))); // NOI18N
@@ -482,9 +492,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lot1Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(586, 586, 586)
+                .addGap(636, 636, 636)
                 .addComponent(jInternalFrame1)
-                .addGap(114, 114, 114))
+                .addGap(64, 64, 64))
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -497,21 +507,17 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(42, 42, 42)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(66, 66, 66)
-                        .addComponent(lot1Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(66, 66, 66)
+                                .addComponent(lot1Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jLabel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MousePressed
         // TODO add your handling code here:
@@ -534,70 +540,25 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1.setText("Released");
     }//GEN-LAST:event_jLabel1MouseReleased
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        errorLabel.setText(null);
-        isTrue = true;
-            carID = 0;
-            carid = "0";
-           /* jTextField1.setText(stockList.get(0));
-            jTextField2.setText(Integer.toString(yearList.get(0)));
-            jTextField3.setText(makeList.get(0));
-            jTextField4.setText(modelList.get(0));
-            jTextField5.setText(colorList.get(0));
-            jTextField6.setText(vinList.get(0));
-            */
-            thumbnailImage.setIcon(null);
-            setTextFields(carList.get(0).getStock(), carList.get(0).getYear(), carList.get(0).getMake(), carList.get(0).getModel(), carList.get(0).getColor(), carList.get(0).getVIN());
-            jInternalFrame1.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         errorLabel.setText(null);
         isTrue = true;
             carID = 1;
             carid = "1";
-            /*jTextField1.setText(stockList.get(1));
-            jTextField2.setText(Integer.toString(yearList.get(1)));
-            jTextField3.setText(makeList.get(1));
-            jTextField4.setText(modelList.get(1));
-            jTextField5.setText(colorList.get(1));
-            jTextField6.setText(vinList.get(1));
-            */
+   
             thumbnailImage.setIcon(null);
-            setTextFields(carList.get(1).getStock(), carList.get(1).getYear(), carList.get(1).getMake(), carList.get(1).getModel(), carList.get(1).getColor(), carList.get(1).getVIN());
-            jInternalFrame1.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
-        // TODO add your handling code here:
         try {
-            // TODO add your handling code here:
-            updateQuery();
+            setConnection();
         } catch (SQLException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_submitButtonActionPerformed
-
-    private void thumbnailAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thumbnailAddButtonActionPerformed
-        // TODO add your handling code here:
-        int returnVal = fc.showOpenDialog(null);
-        
-        if (returnVal == JFileChooser.APPROVE_OPTION)
-        {
-            thumbnailFile  = fc.getSelectedFile();
-            selectedFile = thumbnailFile.getPath();
-            System.out.println(selectedFile);
-            
-            ImageIcon thumbnailPic = new ImageIcon(selectedFile); //getClass().getResource(selectedFile));
-            Image ti = thumbnailPic.getImage();
-            Image thumbnail = ti.getScaledInstance(128, 96, Image.SCALE_SMOOTH);
-            thumbnailPic = new ImageIcon(thumbnail);
-            thumbnailImage.setIcon(thumbnailPic);
-           
-        }
-    }//GEN-LAST:event_thumbnailAddButtonActionPerformed
+            setTextFields(1, carList.get(1).getStock(), carList.get(1).getYear(), carList.get(1).getMake(), carList.get(1).getModel(), carList.get(1).getColor(), carList.get(1).getVIN());
+            vehicleInfo.clearErrorLabel(true);
+            vehicleInfo.setThumbnail(carList.get(1).getStock());
+            jInternalFrame1.setVisible(true);
+            vehicleInfo.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         // TODO add your handling code here:
@@ -609,20 +570,81 @@ public class MainWindow extends javax.swing.JFrame {
         
         if (search.equals(carList.get(0).getStock())){
             jButton1.setIcon(carImage);
-            setTextFields(carList.get(0).getStock(), carList.get(0).getYear(), carList.get(0).getMake(), carList.get(0).getModel(), carList.get(0).getColor(), carList.get(0).getVIN());
+            setTextFields(0, carList.get(0).getStock(), carList.get(0).getYear(), carList.get(0).getMake(), carList.get(0).getModel(), carList.get(0).getColor(), carList.get(0).getVIN());
            
         }
         else if (search.equals(carList.get(1).getStock())){
             jButton2.setIcon(carImage);
-            setTextFields(carList.get(1).getStock(), carList.get(1).getYear(), carList.get(1).getMake(), carList.get(1).getModel(), carList.get(1).getColor(), carList.get(1).getVIN());
+            setTextFields(0, carList.get(1).getStock(), carList.get(1).getYear(), carList.get(1).getMake(), carList.get(1).getModel(), carList.get(1).getColor(), carList.get(1).getVIN());
            
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         // TODO add your handling code here:
-        setTextFields(null,0,null,null,null,null);
+        setTextFields(-1, null,0,null,null,null,null);
     }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void thumbnailAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thumbnailAddButtonActionPerformed
+        // TODO add your handling code here:
+        int returnVal = fc.showOpenDialog(null);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            thumbnailFile  = fc.getSelectedFile();
+            selectedFile = thumbnailFile.getPath();
+            System.out.println(selectedFile);
+
+            ImageIcon thumbnailPic = new ImageIcon(selectedFile); //getClass().getResource(selectedFile));
+        Image ti = thumbnailPic.getImage();
+        Image thumbnail = ti.getScaledInstance(128, 96, Image.SCALE_SMOOTH);
+        thumbnailPic = new ImageIcon(thumbnail);
+        thumbnailImage.setIcon(thumbnailPic);
+
+        }
+    }//GEN-LAST:event_thumbnailAddButtonActionPerformed
+
+    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
+        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            updateQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_submitButtonActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        errorLabel.setText(null);
+        isTrue = true;
+        carID = 0;
+        carid = "0";
+        /* jTextField1.setText(stockList.get(0));
+        jTextField2.setText(Integer.toString(yearList.get(0)));
+        jTextField3.setText(makeList.get(0));
+        jTextField4.setText(modelList.get(0));
+        jTextField5.setText(colorList.get(0));
+        jTextField6.setText(vinList.get(0));
+        */
+        thumbnailImage.setIcon(null);
+
+        try {
+            setConnection();
+        } catch (SQLException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        setTextFields(0, carList.get(0).getStock(), carList.get(0).getYear(), carList.get(0).getMake(), carList.get(0).getModel(), carList.get(0).getColor(), carList.get(0).getVIN());
+        vehicleInfo.clearErrorLabel(true);
+        vehicleInfo.setThumbnail(carList.get(0).getStock());
+        jInternalFrame1.setVisible(true);
+        vehicleInfo.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -671,7 +693,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         
     }
-    private void setTextFields(String sl, int yl, String mal, String mol, String cl, String vl)
+    private void setTextFields(int id, String sl, int yl, String mal, String mol, String cl, String vl)
     {
         jTextField1.setText(sl);
         jTextField2.setText(Integer.toString(yl));
@@ -679,6 +701,15 @@ public class MainWindow extends javax.swing.JFrame {
         jTextField4.setText(mol);
         jTextField5.setText(cl);
         jTextField6.setText(vl);
+        
+        vehicleInfo.setStock(sl);
+        vehicleInfo.setYear(yl);
+        vehicleInfo.setMake(mal);
+        vehicleInfo.setModel(mol);
+        vehicleInfo.setColor(cl);
+        vehicleInfo.setVIN(vl);
+        
+        vehicleInfo.setCarID(id);
     }
     
     public void setCarIcons(){
@@ -841,7 +872,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         String user = "root";
         String pass = "";
-        
+        carList.clear();
         try {
             myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/DealerTrack", user, pass);
             
