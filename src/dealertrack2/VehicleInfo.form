@@ -55,7 +55,7 @@
               <Component id="jPanel4" min="-2" pref="27" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
           </Group>
@@ -77,8 +77,9 @@
                       <Component id="modelLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="colorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="vinLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="priceLabel" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="stockTextField" max="32767" attributes="0"/>
                       <Component id="yearTextField" max="32767" attributes="0"/>
@@ -86,6 +87,7 @@
                       <Component id="modelTextField" max="32767" attributes="0"/>
                       <Component id="colorTextField" max="32767" attributes="0"/>
                       <Component id="vinTextField" pref="212" max="32767" attributes="0"/>
+                      <Component id="priceField" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -123,6 +125,11 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="vinLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="vinTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="priceField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="priceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -172,6 +179,13 @@
         </Component>
         <Component class="javax.swing.JTextField" name="vinTextField">
         </Component>
+        <Component class="javax.swing.JTextField" name="priceField">
+        </Component>
+        <Component class="javax.swing.JLabel" name="priceLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Price"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel2">
@@ -198,9 +212,9 @@
                   <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="addPhotoButton" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <Component id="submitButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="clearButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -218,7 +232,7 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="addPhotoButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="24" max="32767" attributes="0"/>
+                  <EmptySpace pref="43" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -234,7 +248,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="clearButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Clear"/>
+            <Property name="text" type="java.lang.String" value="Clear Fields"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearButtonActionPerformed"/>

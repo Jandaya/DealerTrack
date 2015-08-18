@@ -16,19 +16,29 @@ public class Car {
     private String model;
     private String color;
     private String VIN;
-    private String carID;
+    private int carID;
+    private int hasPicture;
+    private int price;
     public Car(){
-        carID = null;
+        carID = 0;
         stock = null;
         year = 0;
         make = null;
         model = null;
         color = null;
         VIN = null;
-        
+        hasPicture = 0;
     }
     
-    public void setCarID(String ci){
+    public int getHasPicture(){
+        return hasPicture;
+    }
+    
+    public void setHasPicture(int p){
+        hasPicture = p;
+    }
+    
+    public void setCarID(int ci){
         carID = ci;
     }
     
@@ -54,7 +64,7 @@ public class Car {
        VIN = v;
    }
    
-   public String getCarID(){
+   public int getCarID(){
        return carID;
    }
    
@@ -81,5 +91,13 @@ public class Car {
    
    public String getVIN(){
        return VIN;
+   }
+   
+   public int getPrice(){
+       return price;
+   }
+   
+   public void setPrice(int p){
+       price = p;
    }
 }

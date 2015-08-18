@@ -42,8 +42,10 @@ public class VehicleInfo extends javax.swing.JFrame {
     private File thumbnailFile;
     private String selectedFile;
     
-    private int carID;
+    private int carID, price;
     private String stock, year, make, model, color, VIN, carid;
+    private int hasPicture;
+    private boolean changedPicture;
     
     Car car = new Car();
     List<Car> carList = new ArrayList<Car>();
@@ -81,6 +83,8 @@ public class VehicleInfo extends javax.swing.JFrame {
         colorTextField = new javax.swing.JTextField();
         vinLabel = new javax.swing.JLabel();
         vinTextField = new javax.swing.JTextField();
+        priceField = new javax.swing.JTextField();
+        priceLabel = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         submitButton = new javax.swing.JButton();
@@ -107,6 +111,8 @@ public class VehicleInfo extends javax.swing.JFrame {
 
         vinLabel.setText("VIN");
 
+        priceLabel.setText("Price");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -119,15 +125,17 @@ public class VehicleInfo extends javax.swing.JFrame {
                     .addComponent(makeLabel)
                     .addComponent(modelLabel)
                     .addComponent(colorLabel)
-                    .addComponent(vinLabel))
-                .addGap(31, 31, 31)
+                    .addComponent(vinLabel)
+                    .addComponent(priceLabel))
+                .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(stockTextField)
                     .addComponent(yearTextField)
                     .addComponent(makeTextField)
                     .addComponent(modelTextField)
                     .addComponent(colorTextField)
-                    .addComponent(vinTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE))
+                    .addComponent(vinTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                    .addComponent(priceField))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -157,6 +165,10 @@ public class VehicleInfo extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(vinLabel)
                     .addComponent(vinTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(priceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(priceLabel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -178,7 +190,7 @@ public class VehicleInfo extends javax.swing.JFrame {
             }
         });
 
-        clearButton.setText("Clear");
+        clearButton.setText("Clear Fields");
         clearButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 clearButtonActionPerformed(evt);
@@ -202,7 +214,7 @@ public class VehicleInfo extends javax.swing.JFrame {
                     .addComponent(addPhotoButton)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(submitButton)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(clearButton)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -215,7 +227,7 @@ public class VehicleInfo extends javax.swing.JFrame {
                     .addComponent(clearButton))
                 .addGap(18, 18, 18)
                 .addComponent(addPhotoButton)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 0));
@@ -264,7 +276,7 @@ public class VehicleInfo extends javax.swing.JFrame {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22))
         );
@@ -290,14 +302,14 @@ public class VehicleInfo extends javax.swing.JFrame {
             
             
             
-            
-            
+            hasPicture = 1;
+            if(hasPicture == 1){
+                changedPicture = true;
+            }
             Path src = Paths.get(selectedFile);
-            //Path dst = Paths.get("C:/Users/Joseph/Desktop");
-            //File dst = new File("C:\\Users\\Joseph\\Desktop\\file.jpg");
             File dst = new File(stock + ".jpg");
             System.out.println(dst.getPath().toString());
-            //Path src, dst;
+            
             try {
                 Files.copy(src, dst.toPath(), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException ex) {
@@ -313,6 +325,7 @@ public class VehicleInfo extends javax.swing.JFrame {
         
         
         try {
+            pullDatabase();
             updateQuery();
             pullDatabase();
         } catch (SQLException ex) {
@@ -332,6 +345,8 @@ public class VehicleInfo extends javax.swing.JFrame {
     }//GEN-LAST:event_clearButtonActionPerformed
 
     public void setThumbnail(String stockNo){
+        //hasPicture = 1;
+        
         String paths = stockNo + ".jpg";
         Path path = Paths.get(paths);
         if (path.equals(null))
@@ -390,6 +405,13 @@ public class VehicleInfo extends javax.swing.JFrame {
         stockTextField.setText(s);
         stock = s;
     }
+    public void setPrice(int p){
+        priceField.setText(Integer.toString(p));
+        price = p;
+    }
+    public int getPrice(){
+        return price;
+    }
     
    public void setYear(int y){
        String temp = Integer.toString(y);
@@ -446,6 +468,14 @@ public class VehicleInfo extends javax.swing.JFrame {
        return carID;
    }
    
+   public void setHasPicture(int hp){
+       hasPicture = hp;
+   }
+   
+   public int getHasPicture(){
+       return hasPicture;
+   }
+   
    public void clearErrorLabel(boolean x){
        if (x){
            errorLabel.setText(null);
@@ -456,12 +486,16 @@ public class VehicleInfo extends javax.swing.JFrame {
     
     public boolean checkStock(String stockNo){
         
+        if(stockNo.equals("0"))
+            return true;
+        
         Iterator ib = carList.iterator();
         int i = 0;
-        
+        System.out.println(carID + " = " + carList.get(i).getCarID());
+        System.out.println(stockNo + " = " + carList.get(i).getStock());
         while(ib.hasNext()){
             
-            if(!(carid.equals(carList.get(i).getCarID()))){
+            if(carID != carList.get(i).getCarID()){
                 if(stockNo.equals(carList.get(i).getStock())){
                     return false;
                 }
@@ -489,44 +523,50 @@ public class VehicleInfo extends javax.swing.JFrame {
             
             
             myResult = myStatement.executeQuery("select * from car");
+            
             while(myResult.next()){
-                String tempCarID;
-                tempCarID = myResult.getString("carid");
-                carID = Integer.parseInt(tempCarID);
-                
-                
-                stock = myResult.getString("stock");
-                //stockList.add(stock);
-                
-                
+                /*
+                carID = myResult.getInt("carid");                               
+                stock = myResult.getString("stock"); 
                 
                 year = myResult.getString("year");
-                //yearList.add(Integer.parseInt(year));
                 int year2;
                 year2 = Integer.parseInt(year);
                 
-                make = myResult.getString("make");
-                //makeList.add(make);
-                
+                make = myResult.getString("make");  
                 model = myResult.getString("model");
-                //modelList.add(model);
-                
                 color = myResult.getString("color");
-                //colorList.add(color);
                 
                 VIN = myResult.getString("vin");
-                //vinList.add(VIN);
                 
-                // test for car obj
+                price = myResult.getInt("price");
+                
+                hasPicture = myResult.getInt("haspicture");
+                
                 
                 car = new Car();
-                car.setCarID(tempCarID);
+                car.setCarID(carID);
                 car.setStock(stock);
                 car.setYear(year2);
                 car.setMake(make);
                 car.setModel(model);
                 car.setColor(color);
                 car.setVIN(VIN);
+                car.setPrice(price);
+                car.setHasPicture(hasPicture);
+                //car.setHasPicture(false);
+                */
+                car = new Car();
+                car.setCarID(myResult.getInt("carid"));
+                car.setStock(myResult.getString("stock"));
+                car.setYear(myResult.getInt("year"));
+                car.setMake(myResult.getString("make"));
+                car.setModel(myResult.getString("model"));
+                car.setColor(myResult.getString("color"));
+                car.setVIN(myResult.getString("vin"));
+                car.setPrice(myResult.getInt("price"));
+                car.setHasPicture(myResult.getInt("haspicture"));
+                
                 carList.add(car);
                 
             }
@@ -546,6 +586,23 @@ public class VehicleInfo extends javax.swing.JFrame {
         }
    }
    
+   public void changePictureLocation(String stockDst){
+       System.out.println("Checking for ChangePicture: " + stockDst + " = " + stock);
+       if(hasPicture == 1 && !(stockDst.equals(stock))){
+           System.out.println("changingPicture....");
+            String srcTxt = stock + ".jpg";
+            Path src = Paths.get(srcTxt);
+            File dst = new File(stockDst + ".jpg");
+            System.out.println(dst.getPath().toString());
+
+            try {
+                Files.copy(src, dst.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                Files.delete(src);
+            } catch (IOException ex) {
+                Logger.getLogger(VehicleInfo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       }
+   }
    
     private void updateQuery() throws SQLException{
         Connection myConnection = null;
@@ -554,8 +611,8 @@ public class VehicleInfo extends javax.swing.JFrame {
         
         String user = "root";
         String pass = "";
-        String temp1, temp2, temp3, temp4, temp5, temp6;
-        
+        String temp1, temp2, temp3, temp4, temp5, temp6, temp7;
+        int temp8;
         try {
             myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/DealerTrack", user, pass);
             
@@ -574,14 +631,26 @@ public class VehicleInfo extends javax.swing.JFrame {
             temp4 = modelTextField.getText();
             temp5 = colorTextField.getText();
             temp6 = vinTextField.getText();
+            temp7 = priceField.getText();
+            temp8 = hasPicture;
             
             
             if (checkStock(temp1)){
+                System.out.println(hasPicture + "hasPicture...");
+                changePictureLocation(temp1);
                 errorLabel.setText(null);
-                //myStatement.executeUpdate("update car set stock = "+ temp1 +", year = " + temp2 + ", make = '" + temp3 + "', model = '" + temp4 + "', color = '" + temp5 + "', vin = '" + temp6+ "' where carid = "+ carID);
+                changedPicture = false;
+                myStatement.executeUpdate("update car set stock = "+ temp1 +", year = " + temp2 + ", make = '" + temp3 + "', model = '" + temp4 + "', color = '" + temp5 + "', vin = '" + temp6+ "', price = '" + temp7 + "', haspicture = '" + temp8 + "' where carid = "+ carID);
                 
-
-              
+                //set selected attributes to new attributes    
+                stock = temp1;
+                year = temp2;
+                make = temp3;
+                model = temp4;
+                color = temp5;
+                VIN = temp6;
+                price = Integer.parseInt(temp7);
+                        
                 myResult = myStatement.executeQuery("select * from car");
 
                 
@@ -638,6 +707,8 @@ public class VehicleInfo extends javax.swing.JFrame {
     private javax.swing.JTextField makeTextField;
     private javax.swing.JLabel modelLabel;
     private javax.swing.JTextField modelTextField;
+    private javax.swing.JTextField priceField;
+    private javax.swing.JLabel priceLabel;
     private javax.swing.JLabel stockLabel;
     private javax.swing.JTextField stockTextField;
     private javax.swing.JButton submitButton;
